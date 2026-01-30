@@ -75,12 +75,21 @@ public class TurnoServiceImpl implements TurnoService {
     @Override
     @Transactional
     public TurnoResponse actualizarTurno(TurnoRequest turno, Long id) {
+
+        Doctor doctor = doctorRepository.findByMatricula(turno.getDoctor().getMatricula())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Doctor no encontrado con Matricula: " + turno.getDoctor().getMatricula()));
+        Paciente paciente = pacienteRepository.findByDni(turno.getPaciente().getDni())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Paciente no encontrado con DNI: " + turno.getPaciente().getDni()));
+
         Turno turnoRecibido = modelMapper.map(turno, Turno.class);
+
         return turnoRepository.findById(id)
                 .map(t -> {
                     t.setFechaHora(turnoRecibido.getFechaHora());
-                    t.setPaciente(turnoRecibido.getPaciente());
-                    t.setDoctor(turnoRecibido.getDoctor());
+                    t.setPaciente(paciente);
+                    t.setDoctor(doctor);
                     Turno turnoActualizado = turnoRepository.save(t);
                     return modelMapper.map(turnoActualizado, TurnoResponse.class);
                 })

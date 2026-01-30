@@ -78,7 +78,7 @@ public class PacienteServiceImpl implements PacienteService {
                     p.setDomicilio(modelMapper.map(paciente.getDomicilio(), Domicilio.class));
                     p.setEmail(paciente.getEmail());
                     p.setUsername(paciente.getUsername());
-                    p.setPassword(paciente.getPassword());
+                    p.setPassword(passwordEncoder.encode(paciente.getPassword()));
                     p.setFechaIngreso(paciente.getFechaIngreso());
                     p.setRoles(getRoles(paciente));
                     p.setActivo(paciente.getActivo());

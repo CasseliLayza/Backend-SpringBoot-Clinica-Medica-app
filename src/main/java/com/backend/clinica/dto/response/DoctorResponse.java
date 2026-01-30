@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class DoctorResponse {
+    private Long id;
     private String nombre;
     private String apellido;
     private String matricula;
